@@ -12,7 +12,7 @@ colors = {
     # Blue
     'B': (np.array([90, 90, 90], np.uint8), np.array([125, 255, 255], np.uint8), [255, 0, 0]),
     # Yellow
-    'Y': (np.array([25, 51, 90], np.uint8), np.array([42, 255, 255], np.uint8), [0, 255, 255]),
+    'Y': (np.array([25, 51, 90], np.uint8), np.array([50, 255, 255], np.uint8), [0, 255, 255]),
     # oRANGE
     'O': (np.array([0, 90, 90], np.uint8), np.array([25, 255, 255], np.uint8), [0, 0, 255]),
     # White
@@ -58,13 +58,17 @@ def filterContours(contours, min_size=50, square_threshold=0.2):
 
     return results
 
-def getBestSquares(squares, mean_treshold=0.2):
+def getBestSquares(squares, mean_treshold=0.2, min_distance_threshold=0.7):
     if(len(squares) == 0): return []
     avg_size = statistics.median([r.w for r in squares])
     squares = [r for r in squares if abs(1 - r.w/avg_size) < mean_treshold]
+    if(len(squares) < 2): return []
 
     square_avg_distance = []
     for square in squares:
+        square_smallest_distance = min([square.getDistance(s) for s in squares if s != square])
+        if(square.w/square_smallest_distance < min_distance_threshold): continue
+
         square_avg_distance.append((square, [sum([square.getDistance(s) for s in squares])/len(squares)]))
 
     square_avg_distance.sort(key=lambda x: x[1])
@@ -73,7 +77,7 @@ def getBestSquares(squares, mean_treshold=0.2):
 def drawRects(im, rects):
     for rect in rects:
         cv2.rectangle(im, (rect.x, rect.y),
-                      (rect.x+rect.w, rect.y+rect.w), colors[rect.color][2], 10)
+                      (rect.x+rect.w, rect.y+rect.w), colors[rect.color][2], 5)
 
 
 def getAndProcessImage(im):
@@ -89,6 +93,7 @@ def getAndProcessImage(im):
 vid = cv2.VideoCapture(0)
 fps=0
 squares = []
+arrows = []
 while(True):
     # Capture the video frame
     # by frame
@@ -104,13 +109,13 @@ while(True):
             squares.extend([Square(r[0],r[1],r[2], color_name) for r in rects])
         squares = getBestSquares(squares)
         
-        instruction = gm.getNextMove(squares)
-        if(instruction != ""):
-            print(instruction)
-
-
+        arrows = gm.getNextMove(squares)
+        
     drawRects(frame, squares)
 
+    if(arrows != None and len(arrows)>0 ):
+        for arrow in arrows:
+            cv2.arrowedLine(frame, arrow.start, arrow.end, (150, 150, 150), 10)
 
     # Display the resulting frame
     cv2.imshow('frame', frame)
