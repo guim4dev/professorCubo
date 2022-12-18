@@ -1,0 +1,5 @@
+numpy==1.20.3
+opencv_python==4.6.0.66
+rubik==0.0.1
+rubik_cube==0.0.1
+rubik_solver==0.2.0
