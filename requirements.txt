@@ -2,3 +2,5 @@ opencv_python==4.6.0.66
 rubik==0.0.1
 rubik_cube==0.0.1
 rubik_solver==0.2.0
+Kivy==2.1.0
+Kivy-Garden==0.1.5
