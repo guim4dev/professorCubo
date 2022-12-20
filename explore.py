@@ -1,7 +1,4 @@
-from distutils.command.config import config
-from unittest import result
 import numpy as np
-import sys
 import cv2
 import statistics
 from game_manager import Game_manager
@@ -90,14 +87,14 @@ def getAndProcessImage(im):
 
 # HSV color code lower and upper bounds
 
-vid = cv2.VideoCapture(0)
 fps=0
 squares = []
 arrows = []
-while(True):
-    # Capture the video frame
-    # by frame
-    ret, frame = vid.read()
+
+def run_cube_solver(frame):
+    global fps
+    global squares
+    global arrows
     if(fps==20):
         fps=0
         squares = []
@@ -117,18 +114,13 @@ while(True):
         for arrow in arrows:
             cv2.arrowedLine(frame, arrow.start, arrow.end, (150, 150, 150), 10)
 
-    # Display the resulting frame
-    cv2.imshow('frame', frame)
+    # # Display the resulting frame
+    # cv2.imshow('frame', frame)
     
-    # the 'q' button is set as the
-    # quitting button you may use any
-    # desired button of your choice
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    # # the 'q' button is set as the
+    # # quitting button you may use any
+    # # desired button of your choice
+    # if cv2.waitKey(1) & 0xFF == ord('q'):
+    #     break
 
     fps+=1
-
-# After the loop release the cap object
-vid.release()
-# Destroy all the windows
-cv2.destroyAllWindows()

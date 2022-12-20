@@ -10,7 +10,7 @@ from yaml import CLoader as Loader
 
 class LearningScreen(Screen):
     def get_title_text(self, text, **kwargs):
-        return Label(text=text, font_size='20sp', color=(0,0,0,1), bold=True, **kwargs)
+        return Label(text=text, font_size='20sp', color=(1,1,1,1), bold=True, **kwargs)
 
     def get_header(self):
         header = GridLayout(rows=1, cols=2, size_hint=(1, None))
@@ -41,3 +41,6 @@ class LearningScreen(Screen):
         self.video_player.state = 'pause'
         self.manager.transition.direction = 'right'
         self.manager.current = 'arcamera'
+
+    def destroy(self):
+        print("DESTROY LEARNING SCREEN")
