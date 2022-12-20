@@ -13,7 +13,7 @@ colors = {
     # oRANGE
     'O': (np.array([0, 90, 90], np.uint8), np.array([25, 255, 255], np.uint8), [0, 0, 255]),
     # White
-    'W': (np.array([0, 0, 127], np.uint8), np.array([179, 30, 255], np.uint8), [50, 50, 50]),
+    'W': (np.array([0, 0, 127], np.uint8), np.array([179, 50, 255], np.uint8), [50, 50, 50]),
     # Green
     'G': (np.array([40, 90, 90], np.uint8), np.array([70, 255, 255], np.uint8), [0, 255, 0]),
     # pink
@@ -64,7 +64,7 @@ def getBestSquares(squares, mean_treshold=0.2, min_distance_threshold=0.7):
     square_avg_distance = []
     for square in squares:
         square_smallest_distance = min([square.getDistance(s) for s in squares if s != square])
-        if(square.w/square_smallest_distance < min_distance_threshold): continue
+        if(square_smallest_distance == 0 or square.w/square_smallest_distance < min_distance_threshold): continue
 
         square_avg_distance.append((square, [sum([square.getDistance(s) for s in squares])/len(squares)]))
 

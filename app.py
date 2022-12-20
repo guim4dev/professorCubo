@@ -4,7 +4,10 @@ from screens.ar_screen import ARScreen
 from kivy.logger import Logger, LOG_LEVELS
 from screens.learning_screen import LearningScreen
 from kivy.core.window import Window
-
+from kivy.config import Config
+Config.set('graphics', 'width', '576')
+Config.set('graphics', 'height', '1024')
+Config.write()
 Logger.setLevel(LOG_LEVELS["debug"])
 class MainApp(App):
     def build(self):
